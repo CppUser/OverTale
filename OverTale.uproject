@@ -201,6 +201,10 @@
 		{
 			"Name": "GameplayBehaviors",
 			"Enabled": true
+		},
+		{
+			"Name": "NuPogodi",
+			"Enabled": true
 		}
 	]
 }
