@@ -5,7 +5,7 @@
 #include "Character/OTPawnData.h"
 #include "Components/GameFrameworkComponentManager.h"
 #include "GameModes/OTGameMode.h"
-#include "GameModes/Components/OTExperienceManager.h"
+#include "GameModes/Components/GameplayExperience/OTExperienceManager.h"
 
 AOTPlayerState::AOTPlayerState(const FObjectInitializer& ObjInit) : Super(ObjInit)
 {

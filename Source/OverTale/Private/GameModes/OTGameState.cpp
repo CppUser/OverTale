@@ -3,7 +3,7 @@
 
 #include "OverTale/Public/GameModes/OTGameState.h"
 
-#include "GameModes/Components/OTExperienceManager.h"
+#include "GameModes/Components/GameplayExperience/OTExperienceManager.h"
 
 AOTGameState::AOTGameState(const FObjectInitializer& ObjInit) : Super(ObjInit)
 {

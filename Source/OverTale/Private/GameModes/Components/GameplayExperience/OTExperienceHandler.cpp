@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GameModes/Components/OTExperienceHandler.h"
+#include "GameModes/Components/GameplayExperience/OTExperienceHandler.h"
 #include "Engine/Engine.h"
 #include "Subsystems/SubsystemCollection.h"
 

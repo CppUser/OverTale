@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GameModes/Components/OTExperienceActionSet.h"
+#include "GameModes/Components/GameplayExperience/OTExperienceActionSet.h"
 #include "GameFeatureAction.h"
 #if WITH_EDITOR
 #include "Misc/DataValidation.h"

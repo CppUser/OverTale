@@ -1,16 +1,16 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GameModes/Components/OTExperienceManager.h"
+#include "GameModes/Components/GameplayExperience/OTExperienceManager.h"
 #include "Engine/World.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFeaturesSubsystem.h"
 #include "GameFeatureAction.h"
 #include "GameFeaturesSubsystemSettings.h"
 #include "TimerManager.h"
-#include "GameModes/Components/OTExperienceActionSet.h"
-#include "GameModes/Components/OTExperienceDefinition.h"
-#include "GameModes/Components/OTExperienceHandler.h"
+#include "GameModes/Components/GameplayExperience/OTExperienceActionSet.h"
+#include "GameModes/Components/GameplayExperience/OTExperienceDefinition.h"
+#include "GameModes/Components/GameplayExperience/OTExperienceHandler.h"
 #include "System/OTAssetManager.h"
 
 //@TODO: Async load the experience definition itself
