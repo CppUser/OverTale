@@ -20,6 +20,19 @@ FDelegateHandle UCommonLocalPlayer::CallAndRegister_OnPlayerControllerSet(
 	return OnPlayerControllerSet.Add(Delegate);
 }
 
+FDelegateHandle UCommonLocalPlayer::CallAndRegister_OnPlayerStateSet(FPlayerStateSetDelegate::FDelegate Delegate)
+{
+	APlayerController* PC = GetPlayerController(GetWorld());
+	APlayerState* PlayerState = PC ? PC->PlayerState : nullptr;
+
+	if (PlayerState)
+	{
+		Delegate.Execute(this, PlayerState);
+	}
+	
+	return OnPlayerStateSet.Add(Delegate);
+}
+
 FDelegateHandle UCommonLocalPlayer::CallAndRegister_OnPlayerPawnSet(FPlayerPawnSetDelegate::FDelegate Delegate)
 {
 	APlayerController* PC = GetPlayerController(GetWorld());

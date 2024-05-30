@@ -14,4 +14,8 @@ UCLASS()
 class OVERTALE_API AOTPlayerController : public ACommonPlayerController
 {
 	GENERATED_BODY()
+public:
+	AOTPlayerController(const FObjectInitializer& ObjInit = FObjectInitializer::Get());
+protected:
+	
 };

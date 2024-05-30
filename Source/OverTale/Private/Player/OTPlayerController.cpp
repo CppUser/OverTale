@@ -2,3 +2,7 @@
 
 
 #include "Player/OTPlayerController.h"
+
+AOTPlayerController::AOTPlayerController(const FObjectInitializer& ObjInit) : Super(ObjInit)
+{
+}
