@@ -10,8 +10,13 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Config = Game)
 class OVERTALE_API UOTGameInstance : public UCommonGameInstance
 {
 	GENERATED_BODY()
+public:
+	UOTGameInstance(const FObjectInitializer& ObjInit = FObjectInitializer::Get());
+
+protected:
+	virtual void Init() override;
 };

@@ -13,4 +13,13 @@ UCLASS()
 class OVERTALE_API AOTGameMode : public AModularGameMode
 {
 	GENERATED_BODY()
+public:
+	AOTGameMode(const FObjectInitializer& ObjInit = FObjectInitializer::Get());
+
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
+
+protected:
+	void LoadExperience();
+	void OnExperienceLoaded(FPrimaryAssetId ExperienceID,const FString& ExperienceSource);
+	
 };

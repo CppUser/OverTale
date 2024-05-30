@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
-#include "ModularCharacter.generated.h"
+#include "GameFramework/Pawn.h"
+#include "ModularPawn.generated.h"
 
 UCLASS()
-class MODULARGAMEPLAYACTORS_API AModularCharacter : public ACharacter
+class MODULARGAMEPLAYACTORS_API AModularPawn : public APawn
 {
 	GENERATED_BODY()
 

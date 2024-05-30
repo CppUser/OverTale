@@ -2,29 +2,27 @@
 
 
 #include "OverTale/Public/Character/OTCharacter.h"
+#include "OverTale/Public/Character/Components/OTPawnExtComponent.h"
 
-
-// Sets default values
-AOTCharacter::AOTCharacter()
+AOTCharacter::AOTCharacter(const FObjectInitializer& ObjInit) : Super(ObjInit)
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bStartWithTickEnabled = false;
+
+	PawnExtComponent = ObjInit.CreateDefaultSubobject<UOTPawnExtComponent>(this,"PawnExtensionComponent");
+	
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = true;
+	bUseControllerRotationRoll = false;
 }
 
-// Called when the game starts or when spawned
 void AOTCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
-void AOTCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
 
-// Called to bind functionality to input
 void AOTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);

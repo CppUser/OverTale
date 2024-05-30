@@ -6,6 +6,7 @@
 #include "ModularGameState.h"
 #include "OTGameState.generated.h"
 
+class UOTExperienceManager;
 /**
  * 
  */
@@ -13,4 +14,10 @@ UCLASS()
 class OVERTALE_API AOTGameState : public AModularGameState
 {
 	GENERATED_BODY()
+public:
+	AOTGameState(const FObjectInitializer& ObjInit = FObjectInitializer::Get());
+private:
+	UPROPERTY()
+	TObjectPtr<UOTExperienceManager> ExperienceManager;
+	
 };

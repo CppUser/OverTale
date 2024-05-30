@@ -2,3 +2,45 @@
 
 
 #include "CommonLocalPlayer.h"
+
+UCommonLocalPlayer::UCommonLocalPlayer() : Super(FObjectInitializer::Get())
+{
+}
+
+FDelegateHandle UCommonLocalPlayer::CallAndRegister_OnPlayerControllerSet(
+	FPlayerControllerSetDelegate::FDelegate Delegate)
+{
+	APlayerController* PC = GetPlayerController(GetWorld());
+
+	if (PC)
+	{
+		Delegate.Execute(this, PC);
+	}
+
+	return OnPlayerControllerSet.Add(Delegate);
+}
+
+FDelegateHandle UCommonLocalPlayer::CallAndRegister_OnPlayerPawnSet(FPlayerPawnSetDelegate::FDelegate Delegate)
+{
+	APlayerController* PC = GetPlayerController(GetWorld());
+	APawn* Pawn = PC ? PC->GetPawn() : nullptr;
+
+	if (Pawn)
+	{
+		Delegate.Execute(this, Pawn);
+	}
+
+	return OnPlayerPawnSet.Add(Delegate);
+}
+
+bool UCommonLocalPlayer::GetProjectionData(FViewport* Viewport, FSceneViewProjectionData& ProjectionData,
+	int32 StereoViewIndex) const
+{
+	//TODO:
+	if (!bIsPlayerViewEnabled)
+	{
+		return false;
+	}
+	
+	return Super::GetProjectionData(Viewport, ProjectionData, StereoViewIndex);
+}

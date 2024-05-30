@@ -9,13 +9,13 @@ public class OverTale : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		
 		PublicIncludePaths.AddRange(
-			new string[] {
+			new[] {
 				"OverTale"
 			}
 		);
 		
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", 
+		PublicDependencyModuleNames.AddRange(new[] { "Core", 
 			"Core",
 			"CoreOnline",
 			"CoreUObject",
@@ -31,14 +31,14 @@ public class OverTale : ModuleRules
 			"DataRegistry",
 			//"ReplicationGraph",
 			"GameFeatures",
-			"SignificanceManager",
+			//"SignificanceManager",
 			//"Hotfix",
 			"Niagara",
 			"ControlFlows",
 			"PropertyPath", 
 		});
 		
-		PrivateDependencyModuleNames.AddRange(new string[]
+		PrivateDependencyModuleNames.AddRange(new []
 		{
 			"InputCore",
 			"Slate",

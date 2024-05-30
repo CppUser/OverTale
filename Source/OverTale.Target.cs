@@ -12,4 +12,5 @@ public class OverTaleTarget : TargetRules
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
 		ExtraModuleNames.Add("OverTale");
 	}
+	//TODO: Need to apply some shared settings
 }

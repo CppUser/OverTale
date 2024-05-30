@@ -9,8 +9,10 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class MODULARGAMEPLAYACTORS_API AModularGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
+public:
+	AModularGameMode(const FObjectInitializer& ObjInit = FObjectInitializer::Get());
 };

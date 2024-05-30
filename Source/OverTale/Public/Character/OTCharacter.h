@@ -6,23 +6,22 @@
 #include "ModularCharacter.h"
 #include "OTCharacter.generated.h"
 
+class UOTPawnExtComponent;
+
 UCLASS()
 class OVERTALE_API AOTCharacter : public AModularCharacter
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
-	AOTCharacter();
+	AOTCharacter(const FObjectInitializer& ObjInit = FObjectInitializer::Get());
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
+	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "OT|Character", Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UOTPawnExtComponent> PawnExtComponent;
 };

@@ -9,8 +9,12 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class MODULARGAMEPLAYACTORS_API AModularGameState : public AGameStateBase
 {
 	GENERATED_BODY()
+public:
+	virtual void PreInitializeComponents() override;
+	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 };

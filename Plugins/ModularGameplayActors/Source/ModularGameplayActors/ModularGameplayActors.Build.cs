@@ -26,7 +26,10 @@ public class ModularGameplayActors : ModuleRules
 			new string[]
 			{
 				"Core",
-				// ... add other public dependencies that you statically link with here ...
+				"CoreUObject",
+				"Engine",
+				"ModularGameplay",
+				"AIModule",
 			}
 			);
 			
@@ -34,11 +37,7 @@ public class ModularGameplayActors : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"CoreUObject",
-				"Engine",
-				"Slate",
-				"SlateCore",
-				// ... add private dependencies that you statically link with here ...	
+				
 			}
 			);
 		

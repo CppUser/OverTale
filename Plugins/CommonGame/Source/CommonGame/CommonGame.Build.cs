@@ -25,8 +25,17 @@ public class CommonGame : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core", "ModularGameplayActors",
-				// ... add other public dependencies that you statically link with here ...
+				"Core",
+				"CoreUObject",
+				"InputCore",
+				"Engine",
+				"Slate",
+				"SlateCore",
+				"UMG",
+				"CommonInput",
+				"CommonUI",
+				"GameplayTags",
+				"ModularGameplayActors",
 			}
 			);
 			
@@ -34,11 +43,6 @@ public class CommonGame : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"CoreUObject",
-				"Engine",
-				"Slate",
-				"SlateCore",
-				// ... add private dependencies that you statically link with here ...	
 			}
 			);
 		
