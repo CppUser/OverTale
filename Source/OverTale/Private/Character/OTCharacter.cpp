@@ -2,6 +2,8 @@
 
 
 #include "OverTale/Public/Character/OTCharacter.h"
+
+#include "AbilitySystem/Components/OTAbilitySystemComponent.h"
 #include "OverTale/Public/Character/Components/OTPawnExtComponent.h"
 
 AOTCharacter::AOTCharacter(const FObjectInitializer& ObjInit) : Super(ObjInit)
@@ -14,6 +16,21 @@ AOTCharacter::AOTCharacter(const FObjectInitializer& ObjInit) : Super(ObjInit)
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = true;
 	bUseControllerRotationRoll = false;
+}
+
+UOTAbilitySystemComponent* AOTCharacter::GetOTAbilitySystemComponent() const
+{
+	return Cast<UOTAbilitySystemComponent>(GetAbilitySystemComponent());
+}
+
+UAbilitySystemComponent* AOTCharacter::GetAbilitySystemComponent() const
+{
+	if (PawnExtComponent == nullptr)
+	{
+		return nullptr;
+	}
+
+	return PawnExtComponent->GetOTAbilitySystemComponent();
 }
 
 void AOTCharacter::PossessedBy(AController* NewController)

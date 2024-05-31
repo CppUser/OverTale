@@ -2,6 +2,8 @@
 
 
 #include "Character/Components/OTPawnExtComponent.h"
+
+#include "AbilitySystem/Components/OTAbilitySystemComponent.h"
 #include "Character/OTPawnData.h"
 #include "Components/GameFrameworkComponentManager.h"
 #include "Utils/OTGameplayTags.h"
@@ -13,6 +15,7 @@ UOTPawnExtComponent::UOTPawnExtComponent(const FObjectInitializer& ObjInit) : Su
 	PrimaryComponentTick.bStartWithTickEnabled = false;
 	PrimaryComponentTick.bCanEverTick = false;
 	PawnData = nullptr;
+	ASC = nullptr;
 }
 
 bool UOTPawnExtComponent::CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState,
@@ -106,12 +109,90 @@ void UOTPawnExtComponent::SetPawnData(const UOTPawnData* InPawnData)
 
 void UOTPawnExtComponent::HandleControllerChanged()
 {
+	if (ASC && (ASC->GetAvatarActor() == GetPawnChecked<APawn>()))
+	{
+		ensure(ASC->AbilityActorInfo->OwnerActor == ASC->GetOwnerActor());
+		if (ASC->GetOwnerActor() == nullptr)
+		{
+			UninitializeAbilitySystem();
+		}
+		else
+		{
+			ASC->RefreshAbilityActorInfo();
+		}
+	}
+	
 	CheckDefaultInitialization();
 }
 
 void UOTPawnExtComponent::SetupPlayerInputComponent()
 {
 	CheckDefaultInitialization();
+}
+
+void UOTPawnExtComponent::InitializeAbilitySystem(UOTAbilitySystemComponent* InASC, AActor* InOwnerActor)
+{
+	check(InASC);
+	check(InOwnerActor);
+
+	if (ASC == InASC)
+	{
+		// The ability system component hasn't changed.
+		return;
+	}
+
+	if (ASC)
+	{
+		//Clean up old Ability system
+		UninitializeAbilitySystem();
+	}
+
+	APawn* Pawn = GetPawnChecked<APawn>();
+	AActor* ExistingAvatar = InASC->GetAvatarActor();
+
+	UE_LOG(LogTemp, Verbose, TEXT("Setting up ASC [%s] on pawn [%s] owner [%s], existing [%s] "), *GetNameSafe(InASC), *GetNameSafe(Pawn), *GetNameSafe(InOwnerActor), *GetNameSafe(ExistingAvatar));
+
+	if ((ExistingAvatar != nullptr) && (ExistingAvatar != Pawn))
+	{
+		if (UOTPawnExtComponent* OtherExtensionComponent = FindPawnExtensionComponent(ExistingAvatar))
+		{
+			OtherExtensionComponent->UninitializeAbilitySystem();
+		}
+	}
+
+	ASC = InASC;
+	ASC->InitAbilityActorInfo(InOwnerActor, Pawn);
+
+	OnAbilitySystemInitialized.Broadcast();
+
+}
+
+void UOTPawnExtComponent::UninitializeAbilitySystem()
+{
+	//TODO: Do some propper cleanup on uninitialization of ASC
+
+	ASC= nullptr;
+}
+
+void UOTPawnExtComponent::OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate Delegate)
+{
+	if (!OnAbilitySystemInitialized.IsBoundToObject(Delegate.GetUObject()))
+	{
+		OnAbilitySystemInitialized.Add(Delegate);
+	}
+
+	if (ASC)
+	{
+		Delegate.Execute();
+	}
+}
+
+void UOTPawnExtComponent::OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate Delegate)
+{
+	if (!OnAbilitySystemUninitialized.IsBoundToObject(Delegate.GetUObject()))
+	{
+		OnAbilitySystemUninitialized.Add(Delegate);
+	}
 }
 
 void UOTPawnExtComponent::OnRegister()

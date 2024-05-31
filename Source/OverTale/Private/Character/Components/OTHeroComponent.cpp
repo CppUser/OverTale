@@ -6,6 +6,7 @@
 #include "Misc/UObjectToken.h"
 #include "Utils/OTGameplayTags.h"
 #include "EnhancedInputSubsystems.h"
+#include "AbilitySystem/Components/OTAbilitySystemComponent.h"
 #include "Character/OTPawnData.h"
 #include "Components/GameFrameworkComponentManager.h"
 #include "Input/OTInputComponent.h"
@@ -128,7 +129,7 @@ void UOTHeroComponent::HandleChangeInitState(UGameFrameworkComponentManager* Man
 
 			// The player state holds the persistent data for this player (state that persists across deaths and multiple pawns).
 			// The ability system component and attribute sets live on the player state.
-			//TODO:PawnExtComp->InitializeAbilitySystem(PS->GetOTAbilitySystemComponent(), PS);
+			PawnExtComp->InitializeAbilitySystem(PS->GetOTAbilitySystemComponent(), PS);
 		}
 
 		if (AOTPlayerController* PC = GetController<AOTPlayerController>())
@@ -238,8 +239,8 @@ void UOTHeroComponent::InitializePlayerInput(UInputComponent* PlayerInputCompone
 
 					// This is where we actually bind and input action to a gameplay tag, which means that Gameplay Ability Blueprints will
 					// be triggered directly by these input actions Triggered events. 
-					//TODO:TArray<uint32> BindHandles;
-					//TODO:IC->BindAbilityActions(InputConfig, this, &ThisClass::Input_AbilityInputTagPressed, &ThisClass::Input_AbilityInputTagReleased, /*out*/ BindHandles);
+					TArray<uint32> BindHandles;
+					IC->BindAbilityActions(InputConfig, this, &ThisClass::Input_AbilityInputTagPressed, &ThisClass::Input_AbilityInputTagReleased, /*out*/ BindHandles);
 
 					IC->BindNativeAction(InputConfig, OTGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move, /*bLogIfNotFound=*/ false);
 					IC->BindNativeAction(InputConfig, OTGameplayTags::InputTag_Look_Mouse, ETriggerEvent::Triggered, this, &ThisClass::Input_LookMouse, /*bLogIfNotFound=*/ false);
@@ -305,5 +306,36 @@ void UOTHeroComponent::Input_LookMouse(const FInputActionValue& InputActionValue
 	if (Value.Y != 0.0f)
 	{
 		Pawn->AddControllerPitchInput(Value.Y);
+	}
+}
+
+void UOTHeroComponent::Input_AbilityInputTagPressed(FGameplayTag InputTag)
+{
+	if (const APawn* Pawn = GetPawn<APawn>())
+	{
+		if (const UOTPawnExtComponent* PawnExtComp = UOTPawnExtComponent::FindPawnExtensionComponent(Pawn))
+		{
+			if (UOTAbilitySystemComponent* ASC = PawnExtComp->GetOTAbilitySystemComponent())
+			{
+				ASC->AbilityInputTagPressed(InputTag);
+			}
+		}	
+	}
+}
+
+void UOTHeroComponent::Input_AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	const APawn* Pawn = GetPawn<APawn>();
+	if (!Pawn)
+	{
+		return;
+	}
+
+	if (const UOTPawnExtComponent* PawnExtComp = UOTPawnExtComponent::FindPawnExtensionComponent(Pawn))
+	{
+		if (UOTAbilitySystemComponent* ASC = PawnExtComp->GetOTAbilitySystemComponent())
+		{
+			ASC->AbilityInputTagReleased(InputTag);
+		}
 	}
 }

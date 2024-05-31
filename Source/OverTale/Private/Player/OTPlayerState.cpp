@@ -2,13 +2,30 @@
 
 
 #include "Player/OTPlayerState.h"
+
+#include "AbilitySystem/OTAbilitySet.h"
+#include "AbilitySystem/Components/OTAbilitySystemComponent.h"
 #include "Character/OTPawnData.h"
 #include "Components/GameFrameworkComponentManager.h"
 #include "GameModes/OTGameMode.h"
 #include "GameModes/Components/GameplayExperience/OTExperienceManager.h"
 
+const FName AOTPlayerState::NAME_OTAbilityReady("OTAbilitiesReady");
+
 AOTPlayerState::AOTPlayerState(const FObjectInitializer& ObjInit) : Super(ObjInit)
 {
+	ASC = ObjInit.CreateDefaultSubobject<UOTAbilitySystemComponent>(this, TEXT("AbilitySystemComponent"));
+	ASC->SetIsReplicated(false);
+}
+
+UOTAbilitySystemComponent* AOTPlayerState::GetOTAbilitySystemComponent() const
+{
+	return ASC;
+}
+
+UAbilitySystemComponent* AOTPlayerState::GetAbilitySystemComponent() const
+{
+	return GetOTAbilitySystemComponent();
 }
 
 void AOTPlayerState::SetPawnData(const UOTPawnData* InPawnData)
@@ -22,11 +39,25 @@ void AOTPlayerState::SetPawnData(const UOTPawnData* InPawnData)
 	}
 	
 	PawnData = InPawnData;
+
+	for (const UOTAbilitySet* AbilitySet : PawnData->AbilitySets)
+	{
+		if (AbilitySet)
+		{
+			AbilitySet->GiveToAbilitySystem(ASC, nullptr);
+		}
+	}
+
+	UGameFrameworkComponentManager::SendGameFrameworkComponentExtensionEvent(this, NAME_OTAbilityReady);
+	
 }
 
 void AOTPlayerState::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+
+	check(ASC);
+	ASC->InitAbilityActorInfo(this,GetPawn());
 
 	UWorld* World = GetWorld();
 	if (World && World->IsGameWorld())

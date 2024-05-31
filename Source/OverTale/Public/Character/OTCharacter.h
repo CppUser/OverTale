@@ -3,19 +3,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "ModularCharacter.h"
 #include "OTCharacter.generated.h"
 
+class UOTAbilitySystemComponent;
 class UOTPawnExtComponent;
 
 UCLASS()
-class OVERTALE_API AOTCharacter : public AModularCharacter
+class OVERTALE_API AOTCharacter : public AModularCharacter,public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
 public:
 	AOTCharacter(const FObjectInitializer& ObjInit = FObjectInitializer::Get());
 
+	UFUNCTION(BlueprintCallable)
+	UOTAbilitySystemComponent* GetOTAbilitySystemComponent() const;
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	
 protected:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void UnPossessed() override;
