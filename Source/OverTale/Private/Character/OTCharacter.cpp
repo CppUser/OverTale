@@ -16,6 +16,22 @@ AOTCharacter::AOTCharacter(const FObjectInitializer& ObjInit) : Super(ObjInit)
 	bUseControllerRotationRoll = false;
 }
 
+void AOTCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	PawnExtComponent->HandleControllerChanged();
+}
+
+void AOTCharacter::UnPossessed()
+{
+	Super::UnPossessed();
+}
+
+void AOTCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
 void AOTCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -26,5 +42,6 @@ void AOTCharacter::BeginPlay()
 void AOTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	PawnExtComponent->SetupPlayerInputComponent();
 }
 

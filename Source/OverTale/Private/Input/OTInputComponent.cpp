@@ -2,35 +2,89 @@
 
 
 #include "Input/OTInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "System/OTAssetManager.h"
+#include "UserSettings/EnhancedInputUserSettings.h"
 
-
-// Sets default values for this component's properties
-UOTInputComponent::UOTInputComponent()
+UOTInputComponent::UOTInputComponent(const FObjectInitializer& ObjectInitializer)
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
-
-// Called when the game starts
-void UOTInputComponent::BeginPlay()
+void UOTInputComponent::AddInputMappings(const UOTInputConfig* InputConfig,
+	UEnhancedInputLocalPlayerSubsystem* InputSubsystem) const
 {
-	Super::BeginPlay();
+	check(InputConfig);
+	check(InputSubsystem);
 
-	// ...
+	// Here you can handle any custom logic to add something from your input config if required
+
+
+	//TODO:Temporary bypass Should be handled by user Input Settings
+	UOTAssetManager& AssetManager = UOTAssetManager::Get();
+	
+	if (UEnhancedInputUserSettings* Settings = InputSubsystem->GetUserSettings())
+	{
+		for (const FInputMappingContextAndPriority& Entry : InputConfig->Mappings)
+		{
+	
+			// Register this IMC with the settings!
+			if (UInputMappingContext* IMC = AssetManager.GetAsset(Entry.InputMapping))
+			{
+				Settings->RegisterInputMappingContext(IMC);
+				
+				FModifyContextOptions Options = {};
+				Options.bIgnoreAllPressedKeysUntilRelease = false;
+				// Actually add the config to the local player							
+				InputSubsystem->AddMappingContext(IMC, Entry.Priority, Options);
+			}
+
+			
+		}
+	}
+
+							
 	
 }
 
-
-// Called every frame
-void UOTInputComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                      FActorComponentTickFunction* ThisTickFunction)
+void UOTInputComponent::RemoveInputMappings(const UOTInputConfig* InputConfig,
+	UEnhancedInputLocalPlayerSubsystem* InputSubsystem) const
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	check(InputConfig);
+	check(InputSubsystem);
 
-	// ...
+	// Here you can handle any custom logic to remove input mappings that you may have added above
+
+
+	//TODO:Temporary bypass Should be handled by user Input Settings
+	if (UEnhancedInputUserSettings* Settings = InputSubsystem->GetUserSettings())
+	{
+		for (const FInputMappingContextAndPriority& Entry : InputConfig->Mappings)
+		{
+			// Skip entries that don't want to be registered
+			if (!Entry.bRegisterWithSettings)
+			{
+				continue;
+			}
+
+			// Register this IMC with the settings!
+			if (UInputMappingContext* IMC = Entry.InputMapping.Get())
+			{
+				Settings->UnregisterInputMappingContext(IMC);
+
+				FModifyContextOptions Options = {};
+				Options.bIgnoreAllPressedKeysUntilRelease = false;
+				// Actually add the config to the local player							
+				InputSubsystem->RemoveMappingContext(IMC, Options);
+			}
+		}
+	}
 }
 
+void UOTInputComponent::RemoveBinds(TArray<uint32>& BindHandles)
+{
+	for (uint32 Handle : BindHandles)
+	{
+		RemoveBindingByHandle(Handle);
+	}
+	BindHandles.Reset();
+}

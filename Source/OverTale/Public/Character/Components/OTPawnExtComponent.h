@@ -36,6 +36,11 @@ public:
 	/** Sets the current pawn data */
 	void SetPawnData(const UOTPawnData* InPawnData);
 
+	/** Should be called by the owning pawn when the pawn's controller changes. */
+	void HandleControllerChanged();
+
+	/** Should be called by the owning pawn when the input component is setup. */
+	void SetupPlayerInputComponent();
 protected:
 	virtual void OnRegister() override;
 	virtual void BeginPlay() override;

@@ -104,6 +104,16 @@ void UOTPawnExtComponent::SetPawnData(const UOTPawnData* InPawnData)
 	CheckDefaultInitialization();
 }
 
+void UOTPawnExtComponent::HandleControllerChanged()
+{
+	CheckDefaultInitialization();
+}
+
+void UOTPawnExtComponent::SetupPlayerInputComponent()
+{
+	CheckDefaultInitialization();
+}
+
 void UOTPawnExtComponent::OnRegister()
 {
 	Super::OnRegister();

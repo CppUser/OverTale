@@ -17,10 +17,12 @@ public:
 	AOTCharacter(const FObjectInitializer& ObjInit = FObjectInitializer::Get());
 
 protected:
-	virtual void BeginPlay() override;
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void UnPossessed() override;
 	
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "OT|Character", Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UOTPawnExtComponent> PawnExtComponent;
